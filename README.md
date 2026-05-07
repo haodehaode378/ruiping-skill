@@ -16,7 +16,7 @@
 
 ```bash
 # 克隆到 Claude Code skills 目录
-git clone https://github.com/haodehaode378/ruipin-skill.git ~/.claude/skills/repo-roast
+git clone https://github.com/haodehaode378/ruiping-skill.git ~/.claude/skills/repo-roast
 ```
 
 ## 使用
