@@ -1,0 +1,25 @@
+{
+    "name": "ruipin",
+    "version": "0.1.0",
+    "description": "Opinionated, semantic code repository review with parallel sub-agent analysis across architecture, security, performance, readability, and engineering dimensions. Triggers when user wants a code review, repository audit, project quality assessment, or roast of a repo. Keywords: review this repo, roast my code, audit this project, how good is this codebase, rate this repository, 代码审查, 锐评.",
+    "author": {
+        "name": "锐评",
+        "url": "https://github.com/haodehaode378"
+    },
+    "homepage": "https://github.com/haodehaode378/ruipin-skill",
+    "repository": "https://github.com/haodehaode378/ruipin-skill",
+    "license": "MIT",
+    "keywords": [
+        "code-review",
+        "repo-roast",
+        "repository-audit",
+        "code-quality",
+        "roast",
+        "review",
+        "architecture",
+        "security",
+        "performance",
+        "readability",
+        "engineering"
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "name": "ruipin-skill",
+    "description": "Repo-Roast 锐评 — 代码仓库语义级审查工具。三阶段流程：Scout 快速项目画像 → 5 个 Sub-Agent 并行 Deep Dive（架构/安全/性能/可读性/工程化）→ Editor 汇总锐评报告。支持 4 种审查视角（老炮工程师 / Google 工程文化 / 硅谷创业 / 开源维护者）、S/A/B/C/D 五级评分、大仓库自适应策略。五条铁律保证审查质量：有据可依、有褒有贬、拒绝模糊、对事不对人、给出路。",
+    "owner": {
+        "name": "锐评",
+        "url": "https://github.com/haodehaode378"
+    },
+    "plugins": [
+        {
+            "name": "ruipin",
+            "description": "Repo-Roast — 代码仓库锐评 Skill。三阶段并行审查 + 五维度评分 + 四视角 Flavor。输入仓库 URL 或本地路径，输出结构化锐评报告。",
+            "version": "0.1.0",
+            "source": "./",
+            "author": {
+                "name": "锐评",
+                "url": "https://github.com/haodehaode378"
+            }
+        }
+    ]
+}
