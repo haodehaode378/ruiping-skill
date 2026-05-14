@@ -14,7 +14,7 @@
 | 📖 可读性 | {{read_score}} | {{read_summary}} |
 | 📂 工程化 | {{eng_score}} | {{eng_summary}} |
 
-**综合评分：{{overall_score}}** （满分 S）　|　**审查视角：{{flavor_name}}**
+**综合评分：{{overall_score}}** （满分 S）　|　**审查视角：{{flavor}}**
 
 ---
 

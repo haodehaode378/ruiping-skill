@@ -37,6 +37,7 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations. E
   "highlights": [
     {
       "file": "path/to/file.ext",
+      "line": 10,
       "description": "what was done well and why it matters"
     }
   ],

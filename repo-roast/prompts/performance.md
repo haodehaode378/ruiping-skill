@@ -38,6 +38,7 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
   "highlights": [
     {
       "file": "path/to/file.ext",
+      "line": 10,
       "description": "what performance pattern was done well"
     }
   ],

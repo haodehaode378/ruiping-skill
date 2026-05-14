@@ -71,7 +71,7 @@ Repo-Roast 不是 lint 工具，不是静态分析。它是一个**写了 20 年
        │
        ▼
 ┌──────────────────┐
-│  Phase 1: Scout   │  ← 单 Agent，3 分钟建立项目画像
+│  Phase 1: Scout   │  ← 单 Agent，≤10 次工具调用建立项目画像
 └────────┬─────────┘
          │ 输出：项目画像 JSON
          ▼
@@ -318,6 +318,8 @@ sessions_spawn(
 5. 根据 Flavor 调整语气和侧重点
 
 **评分规则**：
+（具体加权算法见 `prompts/editor.md`，此处为简化参考）
+
 | 维度评分组合 | 综合评分 |
 |-------------|---------|
 | 全部 S | S |
@@ -325,6 +327,8 @@ sessions_spawn(
 | 多数 B+，无 D | B |
 | 有 D 或两个 C | C |
 | 多数 C 以下 | D |
+
+> 注：实际实现采用加权数值算法（S=5, A=4, B=3, C=2, D=1），按 Flavor 权重加权平均后映射回字母等级。以 editor.md 为准。
 
 **Flavor 影响**：
 - `google`：强调可读性、测试覆盖率、文档，语气严谨
@@ -407,7 +411,7 @@ repo-roast/
 2. 收集所有 Sub-Agent 输出
 3. 读取选定的 flavor/{flavor}.md
 4. 生成锐评报告
-5. 保存到 {repo-path}/ROAST_REPORT.md
+5. 保存到 {repo-path}/REPO_ROAST_REPORT.md
 6. 同时输出到聊天
 ```
 
@@ -595,7 +599,7 @@ else:
 ### 8.1 输出位置
 
 1. **聊天输出**：完整报告直接输出到对话
-2. **文件保存**：同时保存到 `{repo-path}/ROAST_REPORT.md`
+2. **文件保存**：同时保存到 `{repo-path}/REPO_ROAST_REPORT.md`
 3. **（可选）飞书文档**：通过 feishu_create_doc 创建云文档
 
 ### 8.2 报告模板
