@@ -14,55 +14,91 @@ You receive:
 
 ## Processing
 
-### Step 1: Compute Overall Score
+### Step 1: Apply Flavor Weights
 
-Apply the scoring matrix to the dimension scores:
+Each flavor defines weights for the 5 dimensions. Before computing the overall score:
 
-| Condition | Overall Score |
-|-----------|---------------|
-| All dimensions S | S |
-| Majority A+, no C or below | A |
-| Majority B+, no D | B |
-| Any D, or 2+ C | C |
-| Majority C or below | D |
-| Ambiguous (e.g. [A, A, B, B, B]) | Lower of the two possibilities |
-| Only 1-2 dimensions completed | Score with "(部分维度)" suffix |
+1. Read the flavor's weight table (e.g., Google: readability 1.3x, engineering 1.3x, architecture 1.0x, security 1.0x, performance 0.7x)
+2. These weights affect the **importance** of each dimension in the overall score calculation
+3. If a dimension timed out or errored, exclude it from both numerator and denominator
 
-Timed-out dimensions do not count toward the denominator. If all dimensions timed out, overall = "无法评定".
+### Step 2: Compute Dimension Scores
 
-### Step 2: Aggregate Issues
+Convert letter grades to numeric values for calculation:
 
-- Gather all issues from all completed dimensions
-- Sort by severity: critical > high > medium > low > info
-- Select top 10 for the report (prioritize critical + high)
-- De-duplicate: if two agents flagged the exact same file+line+problem, merge into one entry
-- Categorize into sections:
-  - 🔴 硬伤：critical + high severity
-  - 🟡 值得关注：medium severity
-  - 🟢 建议优化：low + info severity
+| Grade | Numeric Value |
+|-------|---------------|
+| S | 5 |
+| A | 4 |
+| B | 3 |
+| C | 2 |
+| D | 1 |
 
-### Step 3: Aggregate Highlights
+### Step 3: Compute Weighted Overall Score
 
-- Gather all highlights from all dimensions
-- De-duplicate by file reference
-- Group by theme (design quality, safety, maintainability, etc.)
-- Select top 5-8 for the report
+```
+weighted_sum = Σ (grade_numeric × weight) for each completed dimension
+weight_total = Σ weight for each completed dimension
+overall_numeric = weighted_sum / weight_total
+```
 
-### Step 4: Generate the Roast
+Then map back to a letter grade:
 
-- Write the one-line roast ({{one_line_roast}}) — this is the headline. It should be:
+| Numeric Range | Grade |
+|---------------|-------|
+| 4.5 – 5.0 | S |
+| 3.5 – 4.5 | A |
+| 2.5 – 3.5 | B |
+| 1.5 – 2.5 | C |
+| 1.0 – 1.5 | D |
+
+**Special cases**:
+- Only 1 dimension completed: append "(单一维度)" to the grade
+- Only 2 dimensions completed: append "(部分维度)" to the grade
+- All dimensions timed out: overall = "无法评定"
+
+### Step 4: Aggregate Issues
+
+1. Gather all issues from all completed dimensions
+2. De-duplicate: if two agents flagged the exact same file+line+problem, merge into one entry (keep the more severe severity)
+3. Sort by severity: critical > high > medium > low > info
+4. Within same severity, sort by dimension priority (security critical > architecture critical > etc.)
+5. Select top 10 for the report (prioritize critical + high)
+6. Categorize into sections:
+   - 🔴 硬伤：critical + high severity
+   - 🟡 值得关注：medium severity
+   - 🟢 建议优化：low + info severity
+
+### Step 5: Aggregate Highlights
+
+1. Gather all highlights from all dimensions
+2. De-duplicate by file reference (keep the most descriptive highlight per file)
+3. Group by theme (design quality, safety, maintainability, etc.)
+4. Select top 5-8 for the report
+5. If highlights are scarce (<3), write a brief "你没做错什么，但也没有什么值得夸的" note instead of fabricating praise
+
+### Step 6: Generate the Roast
+
+- Write the one-line roast (`{{one_line_roast}}`) — this is the headline. It should be:
   - Original synthesis, not a copy-paste from any review
   - Memorable, concrete, and flavor-appropriate
   - Captures the single most important thing about this codebase
-- Write the "Top 3 处方" — the 3 most impactful things to fix, ordered by ROI
+  - 20 words max, in Chinese
+- Write the "Top 3 处方" — the 3 most impactful things to fix, ordered by ROI:
+  - Each prescription: title + one-line reason + concrete fix direction
+  - Should address the root cause, not symptoms
 
-### Step 5: Fill the Template
+### Step 7: Fill the Template
 
-Follow `templates/report.md` structure. Replace all {{placeholders}} with actual content.
+Follow `templates/report.md` structure. Replace all `{{placeholders}}` with actual content.
 
-### Step 6: Add Similar Projects Reference
+### Step 8: Similar Projects Reference
 
-Suggest 1-3 well-regarded open-source projects in the same domain that exemplify good practices. These serve as reference points for "what good looks like." Include brief descriptions and GitHub URLs.
+Suggest 1-3 well-regarded open-source projects in the same domain that exemplify good practices. Include:
+- Project name and GitHub URL
+- One sentence on what they do well that this repo doesn't
+
+Only suggest if you can confidently name a real project. If unsure, write "暂无可靠参考" instead of hallucinating.
 
 ## Tone
 
@@ -76,7 +112,17 @@ Produce the complete markdown report. Save to `{repo-path}/REPO_ROAST_REPORT.md`
 
 ## Validation Before Finalizing
 
-- Spot-check 2-3 cited issues: does the file exist in the repo? Does the line number seem plausible? If a file doesn't exist, remove that finding.
-- Verify all dimension scores present (or marked as timeout/missing)
-- Verify the overall score matches the matrix
-- Check that no banned phrases from the active flavor appear in the report
+Before outputting the final report, perform these checks:
+
+1. **Spot-check citations**: Pick 2-3 cited issues. Verify the file exists in the repo. If not, remove that finding.
+2. **Verify dimension scores**: All completed dimensions have a score. Timed-out/errored dimensions are marked.
+3. **Verify weighted overall**: Recalculate and confirm it matches the matrix formula.
+4. **Check banned phrases**: Scan the report for any phrases banned by the active flavor. Remove them.
+5. **Check highlights honesty**: Don't fabricate praise. If there's nothing good to say, say so briefly.
+
+## Error Handling
+
+- If a dimension review is missing or malformed: skip it, note it in the report as "(未完成)"
+- If you cannot parse the scout JSON: infer project type from the file listing and proceed
+- If flavor file is missing: fall back to `default.md`
+- If template file is missing: use a minimal inline template with the same sections

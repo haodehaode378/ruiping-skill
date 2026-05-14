@@ -80,15 +80,67 @@ version: 0.1.0
    - 审查文件范围（根据深度决定）
    - 严格的 JSON 输出格式要求
 
-3. 并行启动所有 Sub-Agent（使用 Agent 工具，label 为对应名称）
+3. 构造 task prompt 的模板：
 
-4. 等待所有 Sub-Agent 完成。120 秒软超时——超时的维度标记为 `timeout`，不阻塞报告生成。
+   ```
+   你是 {dimension} 审查专家。
+
+   ## 项目信息
+   {scout JSON 内容}
+
+   ## 仓库路径
+   {repo absolute path}
+
+   ## 审查指令
+   {完整读取 prompts/{dimension}.md 内容}
+
+   ## 评分标准
+   {完整读取 rubrics/{dimension}.md 内容}
+
+   ## 输出要求
+   只输出 JSON，不要有任何其他文字。JSON 格式见上方审查指令。
+   每个 issue 必须包含 file 和 line 字段。
+   ```
+
+4. 并行启动所有 Sub-Agent（使用 Agent 工具，label 为对应名称）
+
+5. 等待所有 Sub-Agent 完成。120 秒软超时——超时的维度标记为 `timeout`，不阻塞报告生成。
 
 **结果收集**：
 - 每个 Sub-Agent 的输出应该是严格的 JSON
 - 解析 JSON，验证必要字段存在、severity 值合法（critical/high/medium/low/info）、score 为 S/A/B/C/D
 - 如果 JSON 解析失败，尝试从输出文本中提取 JSON 块。仍失败则标记为 `parse_error`
 - 将各维度结果聚合为 `{ reviews: { architecture: {...}, security: {...}, ... } }`
+
+**输出格式验证示例**（架构维度）：
+```json
+{
+  "dimension": "architecture",
+  "score": "B",
+  "summary": "基本分层但存在循环依赖",
+  "issues": [
+    {
+      "severity": "high",
+      "file": "src/utils.ts",
+      "line": 42,
+      "description": "utility 模块反向依赖 service 层",
+      "suggestion": "提取共享类型到独立模块"
+    }
+  ],
+  "highlights": [
+    {
+      "file": "src/index.ts",
+      "description": "入口文件职责清晰，仅做引导不做业务"
+    }
+  ],
+  "stats": {
+    "module_count": 12,
+    "circular_dep_pairs": 1,
+    "max_dependents": "src/utils.ts",
+    "god_object_count": 0
+  }
+}
+```
 
 ## Phase 3: Editor（主笔）
 
@@ -110,6 +162,12 @@ version: 0.1.0
 7. 在对话中输出完整报告
 
 **幻觉防线**：输出前抽查 2-3 个 issue 引用的文件是否在仓库中存在。不存在则删除该条。
+
+**错误处理**：
+- 某维度超时 → 报告中标注"(未完成)"，不影响其他维度
+- JSON 解析失败 → 尝试从文本中提取 JSON，失败则标记 `parse_error`
+- 某维度无 issues → 正常，可能是好信号，如实反映
+- 全部维度失败 → 输出错误报告，说明原因，建议重试
 
 ## 评分速查
 
