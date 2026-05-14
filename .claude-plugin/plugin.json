@@ -1,7 +1,7 @@
 {
-    "name": "ruipin",
+    "name": "ruiping",
     "version": "0.1.0",
-    "description": "Opinionated, semantic code repository review with parallel sub-agent analysis across architecture, security, performance, readability, and engineering dimensions. Triggers when user wants a code review, repository audit, project quality assessment, or roast of a repo. Keywords: review this repo, roast my code, audit this project, how good is this codebase, rate this repository, 代码审查, 锐评.",
+    "description": "Repo-Roast — opinionated, semantic code repository review with parallel sub-agent analysis across 5 dimensions (architecture, security, performance, readability, engineering). Three-phase pipeline: Scout (project profile in ≤10 tool calls) → Deep Dive (5 parallel sub-agents) → Editor (aggregated roast report with scores, evidence, and suggestions). This skill should be used when the user asks to review a repo, roast code, audit a project, assess codebase quality, or wants a brutally honest code review. Triggers on: review this repo, roast my code, audit this project, how good is this codebase, rate this repository, 代码审查, 锐评, review this repository, codebase health check, project quality assessment.",
     "author": {
         "name": "锐评",
         "url": "https://github.com/haodehaode378"
@@ -9,17 +9,33 @@
     "homepage": "https://github.com/haodehaode378/ruiping-skill",
     "repository": "https://github.com/haodehaode378/ruiping-skill",
     "license": "MIT",
+    "tags": [
+        "code-review",
+        "repository-audit",
+        "code-quality",
+        "architecture",
+        "security",
+        "performance",
+        "readability",
+        "engineering",
+        "claude-code",
+        "skill",
+        "parallel-agents",
+        "sub-agent",
+        "roast",
+        "code-health"
+    ],
     "keywords": [
         "code-review",
         "repo-roast",
         "repository-audit",
         "code-quality",
-        "roast",
-        "review",
-        "architecture",
-        "security",
-        "performance",
-        "readability",
-        "engineering"
+        "architecture-review",
+        "security-audit",
+        "performance-review",
+        "parallel-agents",
+        "sub-agent",
+        "code-health",
+        "developer-tools"
     ]
 }
