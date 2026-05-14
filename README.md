@@ -7,7 +7,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Claude_Code-black?style=flat-square&logo=anthropic&logoColor=white" alt="Claude Code">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="MIT License">
-  <img src="https://img.shields.io/badge/Version-0.1.0-blue?style=flat-square" alt="v0.1.0">
+  <img src="https://img.shields.io/badge/Version-0.2.0-blue?style=flat-square" alt="v0.2.0">
   <img src="https://img.shields.io/badge/Made_with-🔥_Attitude-red?style=flat-square" alt="Attitude">
 </p>
 

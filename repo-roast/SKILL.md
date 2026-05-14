@@ -1,7 +1,7 @@
 ---
 name: repo-roast
 description: Opinionated, semantic code repository review with parallel sub-agent analysis across architecture, security, performance, readability, and engineering dimensions. This skill should be used when the user asks to "review a repo", "roast my code", "audit this project", "how good is this codebase", "rate this repository", "代码审查", "锐评", "review this repo", or wants a structured quality assessment of any Git repository with an opinionated, no-BS tone.
-version: 0.1.0
+version: 0.2.0
 ---
 
 # Repo-Roast

@@ -1,6 +1,6 @@
 {
     "name": "ruiping",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Repo-Roast 锐评 — 有观点、有审美、有脾气的代码仓库语义级审查工具。不是 lint，不是静态分析——是写了 20 年代码、review 过 10000+ PR 的 Tech Lead 在说真话。三阶段并行审查：Scout 快速项目画像 → 5 个 Sub-Agent 并行 Deep Dive（架构/安全/性能/可读性/工程化）→ Editor 汇总锐评报告。支持 4 种审查视角（老炮工程师 / Google 工程文化 / 硅谷创业 / 开源维护者）、S/A/B/C/D 五级评分、大仓库自适应策略。五条铁律：有据可依、有褒有贬、拒绝模糊、对事不对人、给出路。",
     "author": {
         "name": "锐评",
