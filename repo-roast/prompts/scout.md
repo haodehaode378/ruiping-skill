@@ -76,10 +76,12 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 
 ## Flavor Auto-Inference Rules
 
-- Has CONTRIBUTING.md + CODE_OF_CONDUCT + detailed docs → `oss-maintainer`
-- Has extensive tests (>40% ratio) + type hints + style guide config → `google`
-- Small project (<50 files) + low test ratio + focused feature set → `startup`
-- Otherwise → `default`
+Apply in priority order (first match wins):
+
+1. Has `CONTRIBUTING.md` + `CODE_OF_CONDUCT` + detailed docs (README >200 lines or separate docs dir) → `oss-maintainer`
+2. Has extensive tests (>40% test ratio) + type hints + style config (`.eslintrc`, `pyproject.toml` with ruff/black, `.editorconfig`) → `google`
+3. Small project (<50 files) + low test ratio (<20%) + focused feature set (single-purpose tool/library) → `startup`
+4. Otherwise → `default`
 
 ## Constraints
 
@@ -87,3 +89,5 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 - Do NOT read implementation source code (only config, docs, structure)
 - Output MUST be valid JSON with all fields present
 - Language detection: check file extensions, not just README claims
+- If repo is empty or has no recognizable structure: set `first_impression` to describe the issue, set `flavor_hint` to `default`, and return minimal valid JSON
+- LOC estimation: use `wc -l` on source files or rough estimation from file sizes — approximate is fine

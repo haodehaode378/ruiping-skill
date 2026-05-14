@@ -58,3 +58,20 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 - For projects with no tests: do not fabricate test issues, just note the absence in summary and stats.
 - Commit message quality assessment: sample the last 20 commits. If many are "fix", "update", "wip" — flag it.
 - Do not comment on architecture, security, or code style.
+
+## Test Quality Heuristics
+
+Beyond test ratio, assess:
+- **Test isolation**: Do tests share mutable state or depend on execution order?
+- **Assertion quality**: Do tests check behavior (return values, side effects) or just "no crash"?
+- **Test naming**: Do test names describe the expected behavior? (`test_calculates_total_with_tax` vs `test_1`)
+- **Mock overuse**: Are tests mocking everything (including their own code) instead of testing real behavior?
+- **Edge cases**: Are there tests for error paths, boundary conditions, and empty inputs?
+
+## Error Handling Patterns to Flag
+
+- Empty catch/except/rescue blocks
+- Exceptions caught but not logged or re-thrown
+- Missing error handling on file I/O, network, or database operations
+- Generic error messages that lose context (`"An error occurred"`)
+- Error handling that returns null/undefined instead of propagating

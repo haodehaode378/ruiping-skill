@@ -55,3 +55,19 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations. E
 - Do not comment on security, performance, or style — that is for other reviewers.
 - Do not fabricate findings. If the project is too small for architecture analysis, say so in the summary and keep issues minimal.
 - For projects with <10 source files: focus on file-level organization rather than module-level architecture.
+
+## Architecture Pattern Recognition
+
+Identify which pattern(s) the codebase most resembles:
+
+| Pattern | Characteristics |
+|---------|-----------------|
+| MVC | Controllers, Models, Views directories; controller handles request routing |
+| Clean Architecture | Domain, Use Cases, Interface Adapters, Frameworks layers; dependency inversion |
+| Hexagonal/Ports & Adapters | Core domain with ports (interfaces) and adapters (implementations) |
+| Layered | Presentation → Business → Data Access; strict top-down dependency |
+| Modular Monolith | Feature-based modules with internal encapsulation and inter-module APIs |
+| Plugin/Strategy | Core + extensible plugins/strategies via interfaces or registry |
+| Big Ball of Mud | No clear structure; everything imports everything |
+
+Note the dominant pattern and whether it's followed consistently.

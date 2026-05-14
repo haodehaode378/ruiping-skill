@@ -22,6 +22,14 @@ Use the scoring standards defined in `rubrics/security.md`. Assign grade S/A/B/C
 - Libraries: focus on API misuse risks, unsafe defaults, missing input validation in public API
 - Shell scripts: focus on command injection, unquoted variables, unsafe eval/exec
 
+## Language-Specific Security Checks
+
+- **JavaScript/TypeScript**: `eval()`, `Function()`, `innerHTML`, `dangerouslySetInnerHTML`, prototype pollution
+- **Python**: `eval()`, `exec()`, `pickle.loads()` with untrusted data, `subprocess` with `shell=True`, YAML `load()` without `Loader=SafeLoader`
+- **Go**: SQL string concatenation (should use `?` placeholders), command injection via `os/exec`, path traversal in `http.FileServer`
+- **Rust**: `unsafe` blocks (count and review), `unwrap()` on untrusted input, `Command::new()` with user input
+- **Java**: SQL injection via string concatenation, deserialization of untrusted data, XML external entity (XXE) injection
+
 ## Output
 
 Produce ONLY the following JSON object. No markdown wrapping, no explanations.

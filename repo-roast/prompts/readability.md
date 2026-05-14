@@ -56,3 +56,11 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 - Naming criticism is about clarity, not personal taste. "data" is objectively vague; "responsePayload" vs "data" is a choice.
 - Do not comment on architecture, security, or performance.
 - Adapt expectations to language conventions: Go favors short names, Java favors descriptive names. Flag violations of the language's own conventions, not cross-language norms.
+
+## Language-Specific Adaptations
+
+- **Go**: Short names are idiomatic (`i` for index, `err` for error, `buf` for buffer). Flag long names that add no clarity. Focus on exported API naming (must be clear).
+- **Python**: PEP 8 naming. Flag camelCase in functions/variables. Docstrings are expected for public functions.
+- **JavaScript/TypeScript**: camelCase for variables/functions, PascalCase for classes/types. Flag inconsistent style within a file.
+- **Rust**: snake_case for functions/variables, PascalCase for types/traits. Flag `unwrap()` in non-test code.
+- **Java**: Descriptive names preferred. Flag abbreviations except well-known ones (URL, HTTP, ID).

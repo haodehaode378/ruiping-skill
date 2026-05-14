@@ -56,3 +56,11 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 - Do NOT flag theoretical micro-optimizations. Flag patterns that would matter at 10x current scale.
 - Do not comment on architecture, security, or code style.
 - For small projects: focus on resource management and algorithmic choices rather than caching strategy.
+
+## Language-Specific Performance Checks
+
+- **JavaScript/TypeScript**: `forEach` + async (doesn't await), missing `Promise.all()` for parallel ops, synchronous `fs` operations in request handlers, large arrays passed through `JSON.parse(JSON.stringify())` for cloning
+- **Python**: List comprehension vs generator for large datasets, `pandas` chained operations creating intermediate DataFrames, GIL implications for CPU-bound multithreading, missing `__slots__` on high-count objects
+- **Go**: Unbuffered channels in hot paths, `defer` in loops (accumulates), string concatenation in loops (should use `strings.Builder`), `fmt.Sprintf` for simple concatenation
+- **Rust**: Unnecessary `.clone()` in hot paths, `String` where `&str` suffices, `Mutex` where `RwLock` would be better, blocking operations in async context
+- **Java**: String concatenation in loops (should use `StringBuilder`), autoboxing in hot loops, `LinkedList` where `ArrayList` would be faster, creating objects in tight loops
