@@ -1,7 +1,6 @@
 ---
 name: repo-roast
 description: Opinionated, semantic code repository review with parallel sub-agent analysis across architecture, security, performance, readability, and engineering dimensions. This skill should be used when the user asks to "review a repo", "roast my code", "audit this project", "how good is this codebase", "rate this repository", "代码审查", "锐评", "review this repo", or wants a structured quality assessment of any Git repository with an opinionated, no-BS tone.
-version: 0.2.0
 ---
 
 # Repo-Roast
@@ -17,6 +16,13 @@ version: 0.2.0
 3. **拒绝模糊**：禁止"可能存在""或许可以"。要么确认有问题，要么闭嘴。
 4. **对事不对人**：评代码，不评作者。
 5. **给出路**：指出问题必须附带修改建议，哪怕是方向性的。
+
+## 证据规范
+
+- `file` 必须是仓库内的相对路径，不能使用绝对路径、URL 或不存在的路径。
+- `line` 必须是正整数，并且落在该文件实际行数范围内。文件级问题使用最能代表问题的配置行；找不到行号就不要输出该 issue。
+- `description` 必须说明可观察到的代码事实，不要只写原则判断。
+- `suggestion` 必须给出可执行的修改方向，不要只写"优化""重构"。
 
 ## 输入解析
 
@@ -99,7 +105,7 @@ version: 0.2.0
 
    ## 输出要求
    只输出 JSON，不要有任何其他文字。JSON 格式见上方审查指令。
-   每个 issue 必须包含 file 和 line 字段。
+   每个 issue 必须包含 file 和 line 字段，且 file 必须存在、line 必须落在文件行数范围内。
    ```
 
 4. 并行启动所有 Sub-Agent（使用 Agent 工具，label 为对应名称）
@@ -108,7 +114,7 @@ version: 0.2.0
 
 **结果收集**：
 - 每个 Sub-Agent 的输出应该是严格的 JSON
-- 解析 JSON，验证必要字段存在、severity 值合法（critical/high/medium/low/info）、score 为 S/A/B/C/D
+- 解析 JSON，验证必要字段存在、severity 值合法（critical/high/medium/low/info）、score 为 S/A/B/C/D、每个 issue 的 file/line 可定位
 - 如果 JSON 解析失败，尝试从输出文本中提取 JSON 块。仍失败则标记为 `parse_error`
 - 将各维度结果聚合为 `{ reviews: { architecture: {...}, security: {...}, ... } }`
 
@@ -161,7 +167,7 @@ version: 0.2.0
 6. 保存到 `{repo-path}/REPO_ROAST_REPORT.md`
 7. 在对话中输出完整报告
 
-**幻觉防线**：输出前抽查 2-3 个 issue 引用的文件是否在仓库中存在。不存在则删除该条。
+**幻觉防线**：输出前抽查 2-3 个 issue 引用的文件和行号是否在仓库中存在且可定位。不存在、超出行数范围或无法定位证据的 issue 必须删除或降级为不带结论的观察。
 
 **错误处理**：
 - 某维度超时 → 报告中标注"(未完成)"，不影响其他维度

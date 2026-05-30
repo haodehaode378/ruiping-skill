@@ -1,0 +1,7 @@
+interface:
+  display_name: "Repo-Roast"
+  short_description: "Opinionated repository review across architecture, security, performance, readability, and engineering."
+  default_prompt: "Use $repo-roast to review this repository and produce a structured roast report with evidence and fixes."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,6 +1,6 @@
 {
     "name": "ruiping",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Repo-Roast — opinionated, semantic code repository review with parallel sub-agent analysis across 5 dimensions (architecture, security, performance, readability, engineering). Three-phase pipeline: Scout (project profile in ≤10 tool calls) → Deep Dive (5 parallel sub-agents) → Editor (aggregated roast report with scores, evidence, and suggestions). This skill should be used when the user asks to review a repo, roast code, audit a project, assess codebase quality, or wants a brutally honest code review. Triggers on: review this repo, roast my code, audit this project, how good is this codebase, rate this repository, 代码审查, 锐评, review this repository, codebase health check, project quality assessment.",
     "author": {
         "name": "锐评",

@@ -8,8 +8,8 @@
     "plugins": [
         {
             "name": "ruiping",
-            "description": "Repo-Roast 锐评 v0.2.0 — 五维度并行代码审查 Skill。架构/安全/性能/可读性/工程化五个 Sub-Agent 并行工作，4 种 Flavor 视角（老炮/Google/Startup/OSS），S/A/B/C/D 评分，自适应仓库规模，语言特定检查项（JS/Python/Go/Rust/Java），加权评分算法，输出结构化报告。五条铁律：有据可依、有褒有贬、拒绝模糊、对事不对人、给出路。",
-            "version": "0.2.0",
+            "description": "Repo-Roast 锐评 v0.3.0 — 五维度并行代码审查 Skill。架构/安全/性能/可读性/工程化五个 Sub-Agent 并行工作，4 种 Flavor 视角（老炮/Google/Startup/OSS），S/A/B/C/D 评分，自适应仓库规模，语言特定检查项（JS/Python/Go/Rust/Java），加权评分算法，输出结构化报告。五条铁律：有据可依、有褒有贬、拒绝模糊、对事不对人、给出路。",
+            "version": "0.3.0",
             "source": "./",
             "author": {
                 "name": "锐评",
