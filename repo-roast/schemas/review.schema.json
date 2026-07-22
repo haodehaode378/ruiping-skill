@@ -16,6 +16,11 @@
       "type": "array",
       "items": { "$ref": "#/$defs/highlight" }
     },
+    "observations": {
+      "type": "array",
+      "description": "Unscored items that require more evidence. Observations never enter formal issues or scoring.",
+      "items": { "$ref": "#/$defs/observation" }
+    },
     "stats": {
       "type": "object",
       "description": "Dimension-specific observed statistics. Values must be JSON scalars or arrays of scalars.",
@@ -75,6 +80,17 @@
         "line": { "type": "integer", "minimum": 1 },
         "title": { "type": "string", "minLength": 1 },
         "description": { "type": "string", "minLength": 1 }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "line", "description", "verification_needed"],
+      "properties": {
+        "file": { "$ref": "#/$defs/relativePath" },
+        "line": { "type": "integer", "minimum": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "verification_needed": { "type": "string", "minLength": 1 }
       }
     }
   }

@@ -48,7 +48,7 @@ description: Opinionated, semantic code repository review with parallel sub-agen
 **目标**：快速建立项目画像，决定后续审查策略。不读实现代码。
 
 **步骤**：
-1. 读取 `prompts/scout.md` 获取完整侦察指令
+1. 读取 `prompts/scout.md` 获取完整侦察指令，并把用户的 `--depth`、`--focus` 原样传入 Scout
 2. 严格按照其中的步骤执行：项目身份 → 目录结构 → 构建配置 → CI 配置 → Git 历史 → 代码统计
 3. 工具调用上限 10 次
 4. 输出结构化 JSON（字段定义见 `prompts/scout.md`）
@@ -56,15 +56,15 @@ description: Opinionated, semantic code repository review with parallel sub-agen
 **根据画像决定**：
 - **Flavor**：用户指定 → 用用户指定的；未指定 → 根据 scout 的 `flavor_hint` 自动推断
 - **Tone**：用户指定 → 使用指定值；未指定 → 使用 `sharp`。Tone 只影响 Editor 表达，不进入 Scout 或 Deep Dive
-- **深度和文件范围**：
+- **深度和文件范围**：Scout 必须按 `prompts/scout.md` 的确定性规则输出 `review_scope`：
 
   | 代码行数 | 深度 | 审查范围 |
   |----------|------|----------|
   | < 5,000 | deep | 全部源文件 |
-  | 5,000 – 50,000 | standard | 核心模块（排除 node_modules、vendor、.git、dist、build） |
+  | 5,000 – 50,000 | standard | 入口、公共 API、配置、热点、核心业务目录，按规则最多 40 个文件 |
   | > 50,000 | quick | 热点文件 top 20 + 入口文件 + 配置文件 |
 
-  热点文件清单来自 scout 的 `hotspots` 字段。如果为空，回退到：入口文件 + 配置文件 + 按行数排序的前 20 个源文件。
+  `--focus` 优先于自动范围，只允许把 focus 内的源文件或配置加入 `included_files`；focus 外配置和元数据只能用于理解上下文。最终清单必须去重、按路径排序且全部存在。五个 Deep Dive 共享同一个 `review_scope`，不得各自扩张范围。
 
 ## Phase 2: Deep Dive（深入审查）
 
@@ -85,7 +85,7 @@ description: Opinionated, semantic code repository review with parallel sub-agen
    - 对应 `rubrics/{dimension}.md` 的完整内容
    - Phase 1 输出的项目画像 JSON
    - 仓库的绝对路径
-   - 审查文件范围（根据深度决定）
+   - Phase 1 输出的完整 `review_scope`（五个维度使用完全相同的 `included_files`）
    - 严格的 JSON 输出格式要求
 
 3. 构造 task prompt 的模板：
@@ -98,6 +98,11 @@ description: Opinionated, semantic code repository review with parallel sub-agen
 
    ## 仓库路径
    {repo absolute path}
+
+   ## 唯一审查范围
+   {scout.review_scope JSON 内容}
+
+   只审查 review_scope.included_files 中的实现或配置。范围外的配置和元数据只能用于上下文理解，不能静默扩展 finding 范围。
 
    ## 审查指令
    {完整读取 prompts/{dimension}.md 内容}
@@ -120,7 +125,9 @@ description: Opinionated, semantic code repository review with parallel sub-agen
 - 每个 Sub-Agent 的输出应该是严格的 JSON
 - 解析 JSON，并按 `schemas/review.schema.json` 验证必要字段、枚举值和字段结构；每个 issue 的 file/line 还必须在仓库中实际可定位
 - 如果 JSON 解析失败，尝试从输出文本中提取 JSON 块。仍失败则标记为 `parse_error`
-- 将各维度结果聚合为 `{ reviews: { architecture: {...}, security: {...}, ... } }`
+- 维护四个互斥状态：`requested_dimensions` 是用户请求（省略则为全部五维），`completed_dimensions` 是通过 Schema 的请求维度，`failed_dimensions` 是超时/解析/验证失败的请求维度，`skipped_dimensions` 是未请求维度
+- 必须满足：requested = completed ∪ failed，requested ∩ skipped = ∅，requested ∪ skipped = 固定五维；每个 failed 都有对应 `review_errors`
+- 将画像、结果、错误、四种维度状态、Flavor 和 Tone 聚合为符合 `schemas/report-input.schema.json` 的 Editor 输入
 
 **输出格式验证示例**（架构维度）：
 ```json

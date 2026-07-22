@@ -24,6 +24,8 @@ The complete input must conform to `schemas/report-input.schema.json` and contai
 
 Do not invent missing `title`, `impact`, `pattern`, or highlight fields to repair a malformed review. Mark that review as a validation failure.
 
+Optional `observations` are unscored investigation notes. They never enter issue aggregation, severity ordering, rhetoric matching, prescriptions, or score calculation.
+
 ## Immutable Finding Fields
 
 After a review passes schema validation, these fields are read-only:
@@ -77,6 +79,17 @@ If the Flavor file is missing, use `flavors/default.md`.
 
 ### Step 3: Compute Scores
 
+First validate dimension states against the fixed universe `architecture`, `security`, `performance`, `readability`, `engineering`:
+
+- `requested_dimensions`: exactly the user-requested dimensions, or all five when omitted.
+- `completed_dimensions`: requested dimensions with a schema-valid review.
+- `failed_dimensions`: requested dimensions that timed out or failed parsing/validation.
+- `skipped_dimensions`: fixed dimensions the user did not request.
+- The four arrays are pairwise disjoint; requested equals completed union failed; requested union skipped equals the fixed universe.
+- Every failed dimension has one matching `review_errors` entry. Skipped dimensions never have an error.
+
+Display `completed_dimension_count / requested_dimension_count`. A successful two-dimension request is `2/2`, not `2/5` and not a partial-failure label. Render skipped dimension score rows as `未请求` and failed rows as `未完成`.
+
 Convert grades to numeric values:
 
 | Grade | Numeric Value |
@@ -99,13 +112,13 @@ Map the result:
 
 | Numeric Range | Grade |
 |---|---|
-| 4.5 – 5.0 | S |
-| 3.5 – 4.5 | A |
-| 2.5 – 3.5 | B |
-| 1.5 – 2.5 | C |
-| 1.0 – 1.5 | D |
+| `4.5 <= score <= 5.0` | S |
+| `3.5 <= score < 4.5` | A |
+| `2.5 <= score < 3.5` | B |
+| `1.5 <= score < 2.5` | C |
+| `1.0 <= score < 1.5` | D |
 
-If all requested dimensions failed, set the overall result to `无法评定`.
+If all requested dimensions failed, set the overall result to `无法评定`. Do not append “单一维度” or “部分维度” to a valid score; completeness is represented by the explicit state arrays and counts.
 
 ### Step 4: Aggregate Issues
 

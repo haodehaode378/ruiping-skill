@@ -38,7 +38,7 @@
         }
       }
     },
-    "requested_dimensions": { "$ref": "#/$defs/dimensionList" },
+    "requested_dimensions": { "$ref": "#/$defs/requestedDimensionList" },
     "completed_dimensions": { "$ref": "#/$defs/dimensionList" },
     "failed_dimensions": { "$ref": "#/$defs/dimensionList" },
     "skipped_dimensions": { "$ref": "#/$defs/dimensionList" },
@@ -48,6 +48,14 @@
   "$defs": {
     "dimensionList": {
       "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": ["architecture", "security", "performance", "readability", "engineering"]
+      }
+    },
+    "requestedDimensionList": {
+      "type": "array",
+      "minItems": 1,
       "uniqueItems": true,
       "items": {
         "enum": ["architecture", "security", "performance", "readability", "engineering"]

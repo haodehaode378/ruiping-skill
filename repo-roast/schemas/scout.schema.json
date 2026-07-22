@@ -10,6 +10,7 @@
     "dependencies",
     "ci",
     "hotspots",
+    "review_scope",
     "flavor_hint",
     "first_impression"
   ],
@@ -87,6 +88,31 @@
       "type": "array",
       "items": { "$ref": "#/$defs/relativePath" },
       "uniqueItems": true
+    },
+    "review_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["included_files", "excluded_patterns", "selection_reason", "depth", "focus"],
+      "properties": {
+        "included_files": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/relativePath" },
+          "uniqueItems": true
+        },
+        "excluded_patterns": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "selection_reason": { "type": "string", "minLength": 1 },
+        "depth": { "enum": ["quick", "standard", "deep"] },
+        "focus": {
+          "anyOf": [
+            { "$ref": "#/$defs/relativePath" },
+            { "type": "null" }
+          ]
+        }
+      }
     },
     "flavor_hint": {
       "enum": ["google", "startup", "oss-maintainer", "default"]

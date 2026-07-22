@@ -59,6 +59,14 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
       "description": "what security practice was done well"
     }
   ],
+  "observations": [
+    {
+      "file": "path/to/file.ext",
+      "line": 15,
+      "description": "the verified suspicious construct without claiming exploitability",
+      "verification_needed": "the runtime condition or data flow that must be checked"
+    }
+  ],
   "stats": {
     "hardcoded_secret_patterns": 0,
     "injection_vectors": 0,
@@ -75,6 +83,8 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 - Keep `title`, `description`, `impact`, and `suggestion` distinct. `description` states evidence; `impact` states consequence and exploit conditions.
 - Use a stable kebab-case `pattern`. Do not guess a pattern when the underlying fact is unverified.
 - Output neutral technical facts only. Do not read `rhetoric/`, write roast lines, use humor, or dramatize severity.
-- Do NOT fabricate vulnerabilities. If something looks suspicious but cannot be confirmed as exploitable, mark it as `info` severity.
+- `info` is still a formal issue and MUST be a verified fact with valid evidence. Never use `info` to hold a guess.
+- If a suspicious construct is visible but exploitability cannot be established, place it in `observations` with the exact missing verification. Observations do not affect score, severity ordering, or the formal issue list.
+- If even the suspicious construct cannot be located at a real file and line, omit it entirely.
 - Do not comment on architecture, performance, or code style.
 - Do NOT attempt to exploit or test vulnerabilities — this is a read-only static review.
