@@ -1,0 +1,12 @@
+{
+  "id": "tone-invariance",
+  "repository_files": {"src/user-service.ts": 120, "src/index.ts": 20},
+  "scout_input": {"project":{"name":"fixture-app","description":"fixture application","language":"TypeScript","framework":"none","type":"library"},"scale":{"files":2,"loc":140,"test_ratio":0.2,"has_tests":true},"structure":{"verdict":"clean","depth":2,"notes":[]},"dependencies":{"count":0,"risk_level":"low","notes":[]},"ci":{"exists":true,"tools":["GitHub Actions"],"coverage":["test"]},"hotspots":["src/user-service.ts"],"review_scope":{"included_files":["src/index.ts","src/user-service.ts"],"excluded_patterns":["node_modules/**"],"selection_reason":"fixture scope","depth":"deep","focus":null},"flavor_hint":"default","first_impression":"small fixture"},
+  "dimension_reviews": {"performance":{"dimension":"performance","score":"B","summary":"存在一处 N+1 查询","issues":[{"severity":"high","file":"src/user-service.ts","line":84,"title":"循环内逐条查询角色","description":"角色查询位于用户循环内部。","impact":"查询次数随用户数量线性增长。","suggestion":"批量查询角色并按 userId 建立映射。","pattern":"n-plus-one"}],"highlights":[],"stats":{"n_plus_one_patterns":1}}},
+  "executions": [
+    {"id":"tone-professional","flavor":"default","tone":"professional","requested_dimensions":["performance"],"completed_dimensions":["performance"],"failed_dimensions":[],"skipped_dimensions":["architecture","security","readability","engineering"],"review_errors":{},"expected_behavior":["使用 professional 文本或纯技术回退","显示 1/1"],"forbidden_behavior":["修改 finding 事实字段","攻击代码作者"]},
+    {"id":"tone-sharp","flavor":"default","tone":"sharp","requested_dimensions":["performance"],"completed_dimensions":["performance"],"failed_dimensions":[],"skipped_dimensions":["architecture","security","readability","engineering"],"review_errors":{},"expected_behavior":["匹配 performance-n-plus-one 语料","显示 1/1"],"forbidden_behavior":["修改 finding 事实字段","重复使用模板 id"]},
+    {"id":"tone-savage","flavor":"default","tone":"savage","requested_dimensions":["performance"],"completed_dimensions":["performance"],"failed_dimensions":[],"skipped_dimensions":["architecture","security","readability","engineering"],"review_errors":{},"expected_behavior":["只改变可选 roast 文本","显示 1/1"],"forbidden_behavior":["提高 severity","添加生产事故结论"]}
+  ],
+  "immutable_fields": ["severity","file","line","title","description","impact","suggestion","pattern"]
+}

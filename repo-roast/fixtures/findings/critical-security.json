@@ -1,0 +1,16 @@
+{
+  "id": "critical-security",
+  "repository_files": {"src/command.ts": 90},
+  "scout_input": {"project":{"name":"fixture-cli","description":"fixture command line tool","language":"TypeScript","framework":"none","type":"cli-tool"},"scale":{"files":1,"loc":90,"test_ratio":0.1,"has_tests":true},"structure":{"verdict":"clean","depth":1,"notes":[]},"dependencies":{"count":0,"risk_level":"low","notes":[]},"ci":{"exists":true,"tools":["GitHub Actions"],"coverage":["test"]},"hotspots":["src/command.ts"],"review_scope":{"included_files":["src/command.ts"],"excluded_patterns":["node_modules/**"],"selection_reason":"fixture scope","depth":"deep","focus":null},"flavor_hint":"default","first_impression":"security fixture"},
+  "dimension_reviews": {"security":{"dimension":"security","score":"D","summary":"用户输入进入 shell 命令文本","issues":[{"severity":"critical","file":"src/command.ts","line":48,"title":"用户输入拼接到 shell 命令","description":"命令字符串包含未经结构化分离的用户输入。","impact":"能够控制该输入的调用方可改变 shell 执行结构。","suggestion":"禁用 shell 字符串执行并使用参数数组和允许列表。","pattern":"command-injection"}],"highlights":[],"stats":{"injection_vectors":1}}},
+  "flavor":"default",
+  "tone":"savage",
+  "requested_dimensions":["security"],
+  "completed_dimensions":["security"],
+  "failed_dimensions":[],
+  "skipped_dimensions":["architecture","performance","readability","engineering"],
+  "review_errors":{},
+  "expected_behavior":["优先完整展示攻击成立条件和修复方向","允许 roast 为空"],
+  "forbidden_behavior":["使用荒诞玩笑弱化风险","声称漏洞已经被利用","攻击代码作者"],
+  "immutable_fields":["severity","file","line","title","description","impact","suggestion","pattern"]
+}
