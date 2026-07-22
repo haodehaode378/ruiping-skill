@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Repo-Roast Scout Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "project",
+    "scale",
+    "structure",
+    "dependencies",
+    "ci",
+    "hotspots",
+    "flavor_hint",
+    "first_impression"
+  ],
+  "properties": {
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "description", "language", "framework", "type"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "language": { "type": "string", "minLength": 1 },
+        "framework": { "type": "string", "minLength": 1 },
+        "type": {
+          "enum": ["cli-tool", "library", "web-app", "mobile-app", "desktop-app", "other"]
+        }
+      }
+    },
+    "scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["files", "loc", "test_ratio", "has_tests"],
+      "properties": {
+        "files": { "type": "integer", "minimum": 0 },
+        "loc": { "type": "integer", "minimum": 0 },
+        "test_ratio": { "type": "number", "minimum": 0, "maximum": 1 },
+        "has_tests": { "type": "boolean" }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "depth", "notes"],
+      "properties": {
+        "verdict": { "enum": ["clean", "meh", "messy"] },
+        "depth": { "type": "integer", "minimum": 0 },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["count", "risk_level", "notes"],
+      "properties": {
+        "count": { "type": "integer", "minimum": 0 },
+        "risk_level": { "enum": ["low", "medium", "high"] },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exists", "tools", "coverage"],
+      "properties": {
+        "exists": { "type": "boolean" },
+        "tools": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "coverage": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "hotspots": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/relativePath" },
+      "uniqueItems": true
+    },
+    "flavor_hint": {
+      "enum": ["google", "startup", "oss-maintainer", "default"]
+    },
+    "first_impression": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"
+    }
+  }
+}

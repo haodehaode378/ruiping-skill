@@ -31,14 +31,18 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
       "severity": "critical|high|medium|low|info",
       "file": "path/to/file.ext",
       "line": 42,
-      "description": "what the engineering gap is",
-      "suggestion": "how to improve the practice"
+      "title": "short factual title",
+      "description": "what the engineering gap is, specifically and observably",
+      "impact": "the concrete delivery or maintenance consequence",
+      "suggestion": "how to improve the practice",
+      "pattern": "stable-kebab-case-pattern"
     }
   ],
   "highlights": [
     {
       "file": "path/to/file.ext",
       "line": 10,
+      "title": "short factual highlight title",
       "description": "what engineering practice was done exceptionally well"
     }
   ],
@@ -55,7 +59,10 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 
 ## Constraints
 
+- Output must conform to `schemas/review.schema.json`.
 - Every issue MUST cite a specific file + line number.
+- Keep `title`, `description`, `impact`, and `suggestion` distinct. `description` states evidence; `impact` states consequence.
+- Use a stable kebab-case `pattern`. Do not guess a pattern when the underlying fact is unverified.
 - For projects with no tests: do not fabricate test issues, just note the absence in summary and stats.
 - Commit message quality assessment: sample the last 20 commits. If many are "fix", "update", "wip" — flag it.
 - Do not comment on architecture, security, or code style.

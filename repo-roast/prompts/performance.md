@@ -31,14 +31,18 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
       "severity": "critical|high|medium|low|info",
       "file": "path/to/file.ext",
       "line": 42,
-      "description": "what the performance issue is",
-      "suggestion": "how to improve it"
+      "title": "short factual title",
+      "description": "what the performance issue is, specifically and observably",
+      "impact": "the concrete runtime or scale consequence",
+      "suggestion": "how to improve it",
+      "pattern": "stable-kebab-case-pattern"
     }
   ],
   "highlights": [
     {
       "file": "path/to/file.ext",
       "line": 10,
+      "title": "short factual highlight title",
       "description": "what performance pattern was done well"
     }
   ],
@@ -53,7 +57,10 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 
 ## Constraints
 
+- Output must conform to `schemas/review.schema.json`.
 - Every issue MUST cite a specific file + line number.
+- Keep `title`, `description`, `impact`, and `suggestion` distinct. `description` states evidence; `impact` states consequence.
+- Use a stable kebab-case `pattern`. Do not guess a pattern when the underlying fact is unverified.
 - Do NOT flag theoretical micro-optimizations. Flag patterns that would matter at 10x current scale.
 - Do not comment on architecture, security, or code style.
 - For small projects: focus on resource management and algorithmic choices rather than caching strategy.

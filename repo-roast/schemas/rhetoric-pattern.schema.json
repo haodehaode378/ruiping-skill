@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Repo-Roast Rhetoric Pattern Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "dimension",
+    "patterns",
+    "severities",
+    "devices",
+    "requires_verified_evidence",
+    "tones"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^(architecture|security|performance|readability|engineering)-[a-z0-9]+(?:-[a-z0-9]+)*-[0-9]{2}$"
+    },
+    "dimension": {
+      "enum": ["architecture", "security", "performance", "readability", "engineering"]
+    },
+    "patterns": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "severities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["critical", "high", "medium", "low", "info"] }
+    },
+    "devices": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "contrast",
+          "analogy",
+          "understatement",
+          "deadpan",
+          "reversal",
+          "rhetorical-question",
+          "technical-metaphor"
+        ]
+      }
+    },
+    "requires_verified_evidence": { "const": true },
+    "tones": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["professional", "sharp", "savage"],
+      "properties": {
+        "professional": { "type": "string", "minLength": 1 },
+        "sharp": { "type": "string", "minLength": 1 },
+        "savage": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
