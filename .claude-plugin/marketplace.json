@@ -1,6 +1,6 @@
 {
     "name": "ruiping-skill",
-    "description": "Repo-Roast 锐评 — 代码仓库语义级审查 Skill。三阶段流程：Scout 快速项目画像（≤10 次工具调用）→ 5 个 Sub-Agent 并行 Deep Dive（架构/安全/性能/可读性/工程化，120s 超时，失败不阻塞）→ Editor 汇总锐评报告（带评分、证据、建议）。支持 4 种 Flavor 审查视角、S/A/B/C/D 五级评分、大仓库自适应策略（<5k 全量 / 5k-50k 核心 / >50k 热点）。五条铁律保证审查质量。输出保存到仓库根目录 REPO_ROAST_REPORT.md。",
+    "description": "Repo-Roast 锐评 — 证据驱动的五维仓库审查 Skill。Deep Dive 只输出中性事实，Editor 验证真实文件与行号后，按 Flavor 排序并用可配置 Tone 表达；修辞不改变事实、严重度、评分或建议。",
     "owner": {
         "name": "锐评",
         "url": "https://github.com/haodehaode378"
@@ -8,8 +8,8 @@
     "plugins": [
         {
             "name": "ruiping",
-            "description": "Repo-Roast 锐评 v0.3.0 — 五维度并行代码审查 Skill。架构/安全/性能/可读性/工程化五个 Sub-Agent 并行工作，4 种 Flavor 视角（老炮/Google/Startup/OSS），S/A/B/C/D 评分，自适应仓库规模，语言特定检查项（JS/Python/Go/Rust/Java），加权评分算法，输出结构化报告。五条铁律：有据可依、有褒有贬、拒绝模糊、对事不对人、给出路。",
-            "version": "0.3.0",
+            "description": "Repo-Roast 锐评 v0.4.0 — 架构、安全、性能、可读性、工程化五维证据审查，使用严格 JSON Schema、真实文件与行号验证、四种 Flavor 和 professional/sharp/savage 三档 Tone。90 条结构化语料只负责表达，不篡改 finding。",
+            "version": "0.4.0",
             "source": "./",
             "author": {
                 "name": "锐评",

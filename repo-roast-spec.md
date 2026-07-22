@@ -1,5 +1,7 @@
 # 🔥 Repo-Roast Skill — 详细设计文档
 
+> **历史文档**：本文记录 v0.3 系列方案。v0.4.0 的数据契约、审查状态和 Flavor/Tone 分离设计以 `repo-roast/V0.4-DESIGN.md`、各 JSON Schema 与当前 `SKILL.md` 为准。
+
 > 一个有观点、有审美、有脾气的代码仓库锐评 Skill。
 > 支持 Claude Code Sub-Agent 并行审查，输出结构化锐评报告。
 

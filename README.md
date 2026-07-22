@@ -1,170 +1,194 @@
-# 🔥 Repo-Roast —— 锐评你的代码仓库
+# 🔥 Repo-Roast —— 有证据的代码仓库锐评
 
 <p align="center">
-  <i>一个有观点、有审美、有脾气的 Claude Code Skill。<br>不是 lint，不是静态分析——是写了 20 年代码的 Tech Lead 在说真话。</i>
+  <i>先完成五维技术审查，再选择怎么把事实说出来。<br>不是 lint，也不是情绪输出：正式问题必须落到真实文件和行号。</i>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Claude_Code-black?style=flat-square&logo=anthropic&logoColor=white" alt="Claude Code">
+  <img src="https://img.shields.io/badge/Codex-black?style=flat-square&logo=openai&logoColor=white" alt="Codex">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="MIT License">
-  <img src="https://img.shields.io/badge/Version-0.3.0-blue?style=flat-square" alt="v0.3.0">
-  <img src="https://img.shields.io/badge/Made_with-🔥_Attitude-red?style=flat-square" alt="Attitude">
+  <img src="https://img.shields.io/badge/Version-0.4.0-blue?style=flat-square" alt="v0.4.0">
 </p>
 
----
+Repo-Roast 是一个证据驱动的仓库审查 Skill。它让 Scout 确定唯一审查范围，让五个 Deep Dive Agent 只输出中性技术事实，最后由 Editor 在不改动事实、严重度和修复建议的前提下，加入可控的锐评表达。
 
-## 为什么需要 Repo-Roast？
+## v0.4.0 有什么不同
 
-现有工具各管一摊，没人看全局：
+- 固定审查 `architecture`、`security`、`performance`、`readability`、`engineering` 五个维度。
+- 每个正式 issue 都必须有仓库内真实 `file` 和有效 `line`；验证失败即从正式问题中删除。
+- `Flavor` 决定审查立场、权重和优先级，`Tone` 只决定表达锐度，两者不再混用。
+- `professional`、`sharp`、`savage` 三档 Tone 共享同一组技术 finding。
+- 90 条结构化修辞语料按维度、问题模式、严重度和 Tone 匹配；匹配不到就保留纯技术描述。
+- 明确区分 requested、completed、failed、skipped 四种维度状态，未审查不再伪装成低分。
+- 所有阶段数据通过 JSON Schema 契约衔接，并提供六组回归 fixture。
 
-| 工具 | 做什么 | 缺什么 |
-|------|--------|--------|
-| SonarQube | 静态规则扫描 | 没有语义理解，不会说人话 |
-| CodeScene | 热点分析 | 不读代码内容 |
-| ESLint/Prettier | 格式 + 简单规则 | 只管对不对，不管好不好 |
-| **Repo-Roast** | 五维度语义级审查 | — |
+## 工作流
 
-## 能做什么
-
-输入一个 GitHub 仓库地址或本地路径，三阶段自动完成：
-
-```
-用户输入仓库地址
-       │
-       ▼
-┌──────────────────┐
-│  Phase 1: Scout   │  ← 单 Agent，≤10 次调用建立项目画像
-└────────┬─────────┘
-         │ 输出：项目画像 JSON
-         ▼
-┌──────────────────────────────────────────┐
-│  Phase 2: Deep Dive  ← 5 Sub-Agent 并行  │
-│                                           │
-│  🏗️ 架构  │  🔒 安全  │  ⚡ 性能          │
-│  📖 可读性 │  📂 工程化                    │
-└────────┬─────────────────────────────────┘
-         │ 各维度评分 + 问题清单
-         ▼
-┌──────────────────┐
-│  Phase 3: Editor  │  ← 单 Agent，汇总写报告
-└────────┬─────────┘
-         │
-         ▼
-  锐评报告（REPO_ROAST_REPORT.md）
+```text
+Scout：建立项目画像与唯一 review_scope（≤10 次工具调用）
+  ↓
+Deep Dive：五维并行审查，只产出中性、可验证的 JSON finding
+  ↓
+Editor：验证证据与状态 → 计算评分 → 按 Flavor 排序 → 按 Tone 表达
+  ↓
+REPO_ROAST_REPORT.md
 ```
 
-审查结束后，在你的仓库根目录生成一份带评分、带证据、带建议的结构化锐评报告。
+修辞层永远不能修改 finding 的 `severity`、`file`、`line`、`title`、`description`、`impact`、`suggestion` 或 `pattern`。锐评可以更锋利，事实不能跟着变形。
 
 ## 五条铁律
 
-不是建议，是底线。违反任何一条视为审查失败：
-
 | # | 铁律 | 含义 |
 |---|------|------|
-| 1 | **有据可依** | 每个批评必须带文件名 + 行号。没有证据的批评是诽谤 |
-| 2 | **有褒有贬** | 只喷不夸是情绪发泄。亮点必须认，烂处必须说 |
-| 3 | **拒绝模糊** | 禁止"可能存在""或许可以"。确认有问题就说，否则闭嘴 |
-| 4 | **对事不对人** | 评代码，不评作者 |
-| 5 | **给出路** | 指出问题必须附带修改建议，哪怕是方向性的 |
+| 1 | 有据可依 | 正式批评必须带真实文件和行号 |
+| 2 | 有褒有贬 | 亮点如实承认，问题同样直说 |
+| 3 | 拒绝模糊 | 只写已确认事实，不拿猜测凑问题 |
+| 4 | 对事不对人 | 只评价代码、设计和工程结果，禁止人身攻击 |
+| 5 | 给出路 | 每个 issue 都附带可执行的修改方向 |
 
 ## 使用
 
-```bash
-# 基础用法
+```text
+# 默认 Tone 为 sharp
 review https://github.com/xxx/yyy
 
-# 指定审查视角
-review https://github.com/xxx/yyy --flavor google              # Google 工程文化：重视可读性和测试
-review https://github.com/xxx/yyy --flavor startup              # 硅谷创业公司：务实速度导向
-review https://github.com/xxx/yyy --flavor oss-maintainer       # 开源维护者：关注文档和社区
+# 三档表达锐度
+review https://github.com/xxx/yyy --tone professional
+review https://github.com/xxx/yyy --tone sharp
+review https://github.com/xxx/yyy --tone savage
 
-# 指定审查维度
-review https://github.com/xxx/yyy --dimensions security,performance
-
-# 聚焦特定目录
-review /path/to/local/project --focus src/core/
-
-# 审查深度控制
-review https://github.com/xxx/yyy --depth deep    # <5k 行全量审查
-review https://github.com/xxx/yyy --depth quick   # >50k 行只查热点
+# 审查立场、维度、深度和范围
+review /absolute/path/to/repo --flavor google
+review /absolute/path/to/repo --dimensions security,performance
+review /absolute/path/to/repo --depth deep --focus src/core/
 ```
 
-## 审查维度
+支持的 Flavor：`default`、`google`、`startup`、`oss-maintainer`。支持的 Tone：`professional`、`sharp`、`savage`。
 
-| 维度 | 审查内容 |
+### 同一个 finding，不同 Tone
+
+以下三句话基于同一条已验证 finding：`src/auth.ts:42` 把访问令牌写入源码，严重度始终为 `critical`，修复建议始终是移除令牌并轮换凭据。
+
+| Tone | 表达示例 |
 |------|----------|
-| 🏗️ **架构** | 模块依赖、分层清晰度、循环依赖、扩展性 |
-| 🔒 **安全** | 硬编码密钥、注入点、输入校验、依赖漏洞 |
-| ⚡ **性能** | N+1 查询、算法复杂度、资源泄漏、缓存策略 |
-| 📖 **可读性** | 命名质量、函数长度、注释密度、风格一致性 |
-| 📂 **工程化** | 测试覆盖、错误处理、文档、配置管理、Git 工作流 |
+| `professional` | `src/auth.ts:42` 存在硬编码访问令牌，源码泄露会直接暴露凭据；请立即移除并轮换。 |
+| `sharp` | 访问令牌被写进源码，版本库在这里兼职保险箱，而且还是透明的；立即移除并轮换。 |
+| `savage` | 把访问令牌焊进源码，不叫配置管理，叫给泄露事故预填工单；立即移除并轮换。 |
 
-## 评分体系
+`savage` 允许更强的技术讽刺，但仍然只批评可观察的实现，不攻击作者，不使用歧视、羞辱、威胁或煽动性措辞。
 
-| 等级 | 含义 | 标准 |
-|------|------|------|
-| **S** | 标杆级 | 该维度几乎完美，可作为同类项目参考实现 |
-| **A** | 优秀 | 主流最佳实践遵循度 >90%，偶有小瑕疵 |
-| **B** | 良好 | 1-2 个核心问题，有明显改进空间 |
-| **C** | 及格 | 3+ 个核心问题，但不影响基本功能 |
-| **D** | 不及格 | 存在严重影响可维护性/安全性的问题，需要重构 |
+## Flavor 与 Tone
 
-综合评分由各维度评分按矩阵聚合得出（详见 spec）。
+| 概念 | 控制什么 | 不控制什么 |
+|------|----------|------------|
+| Flavor | 五维权重、审查立场、问题优先级 | 不凭空制造 finding，不取消证据要求 |
+| Tone | 句式、修辞密度、表达锐度 | 不改变事实、评分、严重度和建议 |
 
-## 审查视角（Flavor）
+| Flavor | 主要视角 |
+|--------|----------|
+| `default` | 维护成本、边界、长期工程质量 |
+| `google` | 可读性、测试、清晰接口和一致性 |
+| `startup` | 交付速度、风险敞口和可控技术债 |
+| `oss-maintainer` | 文档、贡献体验、兼容性和社区维护 |
 
-同一个仓库，不同视角看到的问题不同：
+## 审查状态与评分
 
-| Flavor | 视角 | 侧重 |
-|--------|------|------|
-| `default` | 🧓 老炮工程师 | 直率、有观点。过度设计？简历驱动开发？依赖膨胀？ |
-| `google` | 🏢 Google 工程文化 | 可读性优先、80%+ 覆盖率、style guide 合规 |
-| `startup` | 🚀 硅谷创业公司 | MVP 可交付性、技术债可不可控、上手成本 |
-| `oss-maintainer` | 🌍 开源维护者 | CONTRIBUTING 指南、社区友好度、onboarding 体验 |
+- `completed`：该维度结果通过 Schema 和证据验证，参与评分。
+- `failed`：请求过但超时、解析失败或验证失败，报告明确原因。
+- `skipped`：用户没有请求，不参与评分，也不显示成低分。
+- `requested`：用户本次要求审查的维度全集。
+
+S/A/B/C/D 只评价已完成维度；安全维度还可以记录没有足够证据升级为正式 finding 的观察项，避免“没发现”和“没检查”混为一谈。
+
+## 报告片段
+
+```markdown
+# Repo-Roast 锐评报告
+
+> Flavor: startup | Tone: sharp
+> Requested: architecture, security
+> Completed: architecture, security | Failed: — | Skipped: performance, readability, engineering
+
+## 🔒 security — D
+
+### [CRITICAL] 硬编码访问令牌
+- 证据：`src/auth.ts:42`
+- 事实：访问令牌以字符串字面量写入源码。
+- 影响：获得仓库读取权限的人可以直接取得有效凭据。
+- 锐评：版本库在这里兼职保险箱，而且还是透明的。
+- 建议：删除源码中的令牌，从密钥管理服务读取，并立即轮换现有凭据。
+```
 
 ## 安装
 
-```bash
-git clone https://github.com/haodehaode378/ruiping-skill.git ~/.claude/skills/repo-roast
+本仓库的可安装 Skill 是其中的 `repo-roast/` 目录。无论使用哪种客户端，安装后都应满足：
+
+```text
+<skills-root>/repo-roast/SKILL.md
 ```
 
-重启 Claude Code 后，说 "review https://github.com/xxx/yyy" 即触发。
+不要把整个仓库直接克隆到 `<skills-root>/repo-roast`，否则入口会变成 `<skills-root>/repo-roast/repo-roast/SKILL.md`，客户端可能无法发现。
 
-## 大仓库自适应
+### Claude Code
 
-| 代码行数 | 深度 | 审查范围 |
-|----------|------|----------|
-| < 5,000 | deep | 全部源文件 |
-| 5,000 – 50,000 | standard | 核心模块 |
-| > 50,000 | quick | 热点文件 top 20 + 入口 + 配置 |
+Claude Code 官方支持项目级 `.claude/skills/<skill-name>/` 和用户级 `~/.claude/skills/<skill-name>/`。先克隆源码，再只复制内部 Skill 目录：
+
+```bash
+git clone --depth 1 https://github.com/haodehaode378/ruiping-skill.git ruiping-skill-source
+mkdir -p .claude/skills
+cp -R ruiping-skill-source/repo-roast .claude/skills/repo-roast
+```
+
+安装结果应为 `.claude/skills/repo-roast/SKILL.md`，之后可使用 `/repo-roast` 或提出匹配其描述的审查请求。若顶层 `.claude/skills` 是在当前会话启动后首次创建，请重启 Claude Code。
+
+### Codex
+
+Codex 官方支持仓库级 `$REPO_ROOT/.agents/skills` 和用户级 `$HOME/.agents/skills`。仓库级安装示例：
+
+```bash
+git clone --depth 1 https://github.com/haodehaode378/ruiping-skill.git ruiping-skill-source
+mkdir -p .agents/skills
+cp -R ruiping-skill-source/repo-roast .agents/skills/repo-roast
+```
+
+安装结果应为 `.agents/skills/repo-roast/SKILL.md`，之后可使用 `$repo-roast` 或提出匹配其描述的审查请求。Codex 通常会自动发现 Skill 变更；若没有出现，请重启客户端。
+
+PowerShell 用户可将最后两行替换为：
+
+```powershell
+New-Item -ItemType Directory -Force .agents\skills | Out-Null
+Copy-Item -Recurse .\ruiping-skill-source\repo-roast .\.agents\skills\repo-roast
+```
+
+当前版本已完成 Schema、语料和 fixture 的仓库内自动验收；发布流程没有冒充完成真实 Claude Code/Codex 会话的端到端运行验证。
 
 ## 目录结构
 
-```
+```text
 repo-roast/
-├── SKILL.md                    # 入口：铁律 + 三阶段流程编排
-├── prompts/
-│   ├── scout.md                # Phase 1 项目侦察
-│   ├── architect.md            # 架构审查 Agent
-│   ├── security.md             # 安全审查 Agent
-│   ├── performance.md          # 性能审查 Agent
-│   ├── readability.md          # 可读性审查 Agent
-│   ├── engineering.md          # 工程化审查 Agent
-│   └── editor.md               # Phase 3 汇总主笔
-├── rubrics/                    # S/A/B/C/D 评分标准
-│   ├── architecture.md
-│   ├── security.md
-│   ├── performance.md
-│   ├── readability.md
-│   └── engineering.md
-├── flavors/                    # 审查视角
-│   ├── default.md
-│   ├── google.md
-│   ├── startup.md
-│   └── oss-maintainer.md
-└── templates/
-    └── report.md               # 报告 Markdown 模板
+├── SKILL.md                 # 入口与三阶段编排
+├── V0.4-DESIGN.md           # v0.4.0 设计与数据流
+├── agents/openai.yaml       # Codex 展示与默认提示元数据
+├── prompts/                 # Scout、五维 Deep Dive、Editor 指令
+├── rubrics/                 # 五维 S/A/B/C/D 评分标准
+├── schemas/                 # Scout、Review、Report Input、Rhetoric JSON Schema
+├── flavors/                 # 审查立场、权重和优先级
+├── rhetoric/
+│   ├── principles.md        # 事实与修辞边界
+│   ├── banned.md            # 禁止表达
+│   ├── devices.md           # 可用修辞设备
+│   ├── transitions.json     # 连接语料
+│   ├── tones/               # professional / sharp / savage
+│   └── patterns/            # 五维 90 条结构化锐评语料
+├── fixtures/                # 六组回归输入、期望报告与验收矩阵
+└── templates/report.md      # 报告模板
 ```
+
+## 参考文档
+
+- [Codex：Build skills](https://learn.chatgpt.com/docs/build-skills)
+- [Claude Code：Extend Claude with skills](https://code.claude.com/docs/en/skills)
 
 ## License
 
