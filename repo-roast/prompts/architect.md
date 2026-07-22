@@ -60,6 +60,7 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations. E
 - Every issue MUST cite a specific file + line number. If you cannot confirm with a line number, do not include the issue.
 - Keep `title`, `description`, `impact`, and `suggestion` distinct. `description` states evidence; `impact` states consequence.
 - Use a stable kebab-case `pattern`. Do not guess a pattern when the underlying fact is unverified.
+- Output neutral technical facts only. Do not read `rhetoric/`, write roast lines, use humor, or dramatize severity.
 - Do not comment on security, performance, or style — that is for other reviewers.
 - Do not fabricate findings. If the project is too small for architecture analysis, say so in the summary and keep issues minimal.
 - For projects with <10 source files: focus on file-level organization rather than module-level architecture.

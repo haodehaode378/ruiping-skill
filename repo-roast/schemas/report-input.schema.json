@@ -3,7 +3,17 @@
   "title": "Repo-Roast Editor Input",
   "type": "object",
   "additionalProperties": false,
-  "required": ["project_profile", "reviews", "review_errors", "flavor"],
+  "required": [
+    "project_profile",
+    "reviews",
+    "review_errors",
+    "requested_dimensions",
+    "completed_dimensions",
+    "failed_dimensions",
+    "skipped_dimensions",
+    "flavor",
+    "tone"
+  ],
   "properties": {
     "project_profile": { "$ref": "scout.schema.json" },
     "reviews": {
@@ -28,6 +38,20 @@
         }
       }
     },
-    "flavor": { "enum": ["default", "google", "startup", "oss-maintainer"] }
+    "requested_dimensions": { "$ref": "#/$defs/dimensionList" },
+    "completed_dimensions": { "$ref": "#/$defs/dimensionList" },
+    "failed_dimensions": { "$ref": "#/$defs/dimensionList" },
+    "skipped_dimensions": { "$ref": "#/$defs/dimensionList" },
+    "flavor": { "enum": ["default", "google", "startup", "oss-maintainer"] },
+    "tone": { "enum": ["professional", "sharp", "savage"] }
+  },
+  "$defs": {
+    "dimensionList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": ["architecture", "security", "performance", "readability", "engineering"]
+      }
+    }
   }
 }

@@ -7,14 +7,19 @@
 ## 📊 体检报告
 
 | 维度 | 评分 | 一句话 |
-|------|------|--------|
+|---|---|---|
 | 🏗️ 架构 | {{arch_score}} | {{arch_summary}} |
 | 🔒 安全 | {{sec_score}} | {{sec_summary}} |
 | ⚡ 性能 | {{perf_score}} | {{perf_summary}} |
 | 📖 可读性 | {{read_score}} | {{read_summary}} |
 | 📂 工程化 | {{eng_score}} | {{eng_summary}} |
 
-**综合评分：{{overall_score}}** （满分 S）　|　**审查视角：{{flavor}}**
+**综合评分：{{overall_score}}** （满分 S）　|　**审查视角：{{flavor}}**　|　**表达锐度：{{tone}}**
+
+- **请求维度**：{{requested_dimensions}}
+- **完成维度**：{{completed_dimensions}}
+- **失败维度**：{{failed_dimensions}}
+- **跳过维度**：{{skipped_dimensions}}
 
 ---
 
@@ -27,7 +32,7 @@
 {{/each}}
 
 {{#if no_highlights}}
-> 没有特别值得夸的地方。代码能跑，但也就仅此而已。
+> 没有足够证据支持特别表扬的实现。
 {{/if}}
 
 ---
@@ -36,6 +41,9 @@
 
 {{#each critical_issues}}
 ### {{index}}. {{title}}
+{{#if roast}}
+> {{roast}}
+{{/if}}
 - **严重级别**：{{severity}}
 - **来源维度**：{{dimension}}
 - **位置**：`{{file}}:{{line}}`
@@ -50,11 +58,20 @@
 ## 🟡 值得关注
 
 {{#each medium_issues}}
-- [{{dimension}}] `{{file}}:{{line}}` — {{description}}　→　{{suggestion}}
+### {{index}}. {{title}}
+{{#if roast}}
+> {{roast}}
+{{/if}}
+- **来源维度**：{{dimension}}
+- **位置**：`{{file}}:{{line}}`
+- **问题**：{{description}}
+- **影响**：{{impact}}
+- **建议**：{{suggestion}}
+
 {{/each}}
 
 {{#if no_medium_issues}}
-> 没有特别需要关注的中等问题。
+> 没有需要报告的中等严重度问题。
 {{/if}}
 
 ---
@@ -62,11 +79,20 @@
 ## 🟢 建议优化
 
 {{#each low_issues}}
-- [{{dimension}}] `{{file}}:{{line}}` — {{description}}　→　{{suggestion}}
+### {{index}}. {{title}}
+{{#if roast}}
+> {{roast}}
+{{/if}}
+- **来源维度**：{{dimension}}
+- **位置**：`{{file}}:{{line}}`
+- **问题**：{{description}}
+- **影响**：{{impact}}
+- **建议**：{{suggestion}}
+
 {{/each}}
 
 {{#if no_low_issues}}
-> 没有需要优化的低优先级问题。
+> 没有需要报告的低优先级问题。
 {{/if}}
 
 ---
@@ -74,7 +100,7 @@
 ## 🏥 Top 3 处方
 
 | # | 处方 | 原因 | 方向 |
-|---|------|------|------|
+|---|---|---|---|
 | 1 | {{rx1_title}} | {{rx1_reason}} | {{rx1_solution}} |
 | 2 | {{rx2_title}} | {{rx2_reason}} | {{rx2_solution}} |
 | 3 | {{rx3_title}} | {{rx3_reason}} | {{rx3_solution}} |
@@ -87,4 +113,4 @@
 
 ---
 
-_由 Repo-Roast Skill 生成 | Flavor: {{flavor}} | 维度完成: {{completed_dimensions}}/5 | 审查时间: {{date}}_
+_由 Repo-Roast Skill 生成 | Flavor: {{flavor}} | Tone: {{tone}} | 维度完成: {{completed_dimension_count}}/{{requested_dimension_count}} | 审查时间: {{date}}_

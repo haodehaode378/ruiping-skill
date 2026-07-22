@@ -63,6 +63,7 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 - Every issue MUST cite a specific file + line number.
 - Keep `title`, `description`, `impact`, and `suggestion` distinct. `description` states evidence; `impact` states consequence.
 - Use a stable kebab-case `pattern`. Do not guess a pattern when the underlying fact is unverified.
+- Output neutral technical facts only. Do not read `rhetoric/`, write roast lines, use humor, or dramatize severity.
 - For projects with no tests: do not fabricate test issues, just note the absence in summary and stats.
 - Commit message quality assessment: sample the last 20 commits. If many are "fix", "update", "wip" — flag it.
 - Do not comment on architecture, security, or code style.

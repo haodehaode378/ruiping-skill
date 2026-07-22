@@ -74,6 +74,7 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 - Every issue MUST cite a specific file + line number.
 - Keep `title`, `description`, `impact`, and `suggestion` distinct. `description` states evidence; `impact` states consequence and exploit conditions.
 - Use a stable kebab-case `pattern`. Do not guess a pattern when the underlying fact is unverified.
+- Output neutral technical facts only. Do not read `rhetoric/`, write roast lines, use humor, or dramatize severity.
 - Do NOT fabricate vulnerabilities. If something looks suspicious but cannot be confirmed as exploitable, mark it as `info` severity.
 - Do not comment on architecture, performance, or code style.
 - Do NOT attempt to exploit or test vulnerabilities — this is a read-only static review.

@@ -61,6 +61,7 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 - Every issue MUST cite a specific file + line number.
 - Keep `title`, `description`, `impact`, and `suggestion` distinct. `description` states evidence; `impact` states consequence.
 - Use a stable kebab-case `pattern`. Do not guess a pattern when the underlying fact is unverified.
+- Output neutral technical facts only. Do not read `rhetoric/`, write roast lines, use humor, or dramatize severity.
 - Naming criticism is about clarity, not personal taste. "data" is objectively vague; "responsePayload" vs "data" is a choice.
 - Do not comment on architecture, security, or performance.
 - Adapt expectations to language conventions: Go favors short names, Java favors descriptive names. Flag violations of the language's own conventions, not cross-language norms.

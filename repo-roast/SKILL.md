@@ -32,6 +32,7 @@ description: Opinionated, semantic code repository review with parallel sub-agen
 |------|------|------|--------|
 | repo | 是 | GitHub URL 或本地绝对路径 | — |
 | --flavor | 否 | 审查视角：google / startup / oss-maintainer / default | default |
+| --tone | 否 | 表达锐度：professional / sharp / savage | sharp |
 | --dimensions | 否 | 逗号分隔的审查维度 | 全部 5 个 |
 | --depth | 否 | 审查深度：quick / standard / deep | 按仓库规模自动决定 |
 | --focus | 否 | 聚焦特定目录或文件 | 全部 |
@@ -54,6 +55,7 @@ description: Opinionated, semantic code repository review with parallel sub-agen
 
 **根据画像决定**：
 - **Flavor**：用户指定 → 用用户指定的；未指定 → 根据 scout 的 `flavor_hint` 自动推断
+- **Tone**：用户指定 → 使用指定值；未指定 → 使用 `sharp`。Tone 只影响 Editor 表达，不进入 Scout 或 Deep Dive
 - **深度和文件范围**：
 
   | 代码行数 | 深度 | 审查范围 |
@@ -106,6 +108,8 @@ description: Opinionated, semantic code repository review with parallel sub-agen
    ## 输出要求
    只输出 JSON，不要有任何其他文字。JSON 必须符合 `schemas/review.schema.json`。
    每个 issue 必须包含 file 和 line 字段，且 file 必须存在、line 必须落在文件行数范围内。
+   只陈述中性、可验证的技术事实。不要读取 rhetoric 目录，不要生成锐评、笑话、侮辱或戏剧化表达。
+   pattern 必须描述已经确认的问题模式；不得为了匹配语料而猜测。
    ```
 
 4. 并行启动所有 Sub-Agent（使用 Agent 工具，label 为对应名称）
@@ -160,24 +164,29 @@ description: Opinionated, semantic code repository review with parallel sub-agen
 **步骤**：
 
 1. 读取 `prompts/editor.md` 获取完整的汇总指令和评分矩阵
-2. 读取选定的 `flavors/{flavor}.md`（默认 `flavors/default.md`）获取语气和权重
-3. 读取 `templates/report.md` 获取报告结构
-4. 执行汇总：
+2. 读取选定的 `flavors/{flavor}.md`（默认 `flavors/default.md`）获取审查立场、权重和优先级
+3. 读取 `rhetoric/tones/{tone}.md`（默认 `rhetoric/tones/sharp.md`）获取表达锐度
+4. 读取 `rhetoric/principles.md`、`rhetoric/banned.md`、对应五维语料和 `rhetoric/transitions.json`
+5. 读取 `templates/report.md` 获取报告结构
+6. 执行汇总：
    - 计算综合评分（评分矩阵见 `prompts/editor.md`）
    - 从所有维度聚合 issue，按 severity 排序，选 Top 10
    - 聚合所有 highlights，去重，分组
-   - 生成一句话毒舌点评
+   - 在全部问题完成证据验证后，按 dimension → pattern → severity → tone 匹配可选锐评
+   - 生成基于已验证结论的一句话点评
    - 写出 Top 3 处方
-5. 按模板生成完整 Markdown 报告
-6. 保存到 `{repo-path}/REPO_ROAST_REPORT.md`
-7. 在对话中输出完整报告
+7. 按模板生成完整 Markdown 报告
+8. 保存到 `{repo-path}/REPO_ROAST_REPORT.md`
+9. 在对话中输出完整报告
 
-**幻觉防线**：输出前抽查 2-3 个 issue 引用的文件和行号是否在仓库中存在且可定位。不存在、超出行数范围或无法定位证据的 issue 必须删除或降级为不带结论的观察。
+**幻觉防线**：输出前逐条验证全部正式 issue 的文件、行号和引用事实。不存在、超出范围或无法定位证据的 issue 必须从正式问题列表删除，不得通过降级严重度继续保留。修辞只能写入生成的 `roast` 字段，不得改变 severity、file、line、title、description、impact、suggestion 或 pattern。
 
 **错误处理**：
 - 某维度超时 → 报告中标注"(未完成)"，不影响其他维度
 - JSON 解析失败 → 尝试从文本中提取 JSON，失败则标记 `parse_error`
 - 某维度无 issues → 正常，可能是好信号，如实反映
+- Tone 文件缺失 → 回退到 sharp；sharp 也缺失则输出纯技术描述
+- pattern 无匹配语料 → 保留技术 finding，不生成锐评
 - 全部维度失败 → 输出错误报告，说明原因，建议重试
 
 ## 评分速查
@@ -215,6 +224,13 @@ description: Opinionated, semantic code repository review with parallel sub-agen
 - `flavors/google.md` — Google 工程文化
 - `flavors/startup.md` — 硅谷创业公司
 - `flavors/oss-maintainer.md` — 开源维护者
+
+### 锐评修辞
+- `rhetoric/principles.md` — 事实与修辞边界
+- `rhetoric/banned.md` — 禁止表达
+- `rhetoric/tones/*.md` — professional / sharp / savage 表达等级
+- `rhetoric/patterns/*.json` — 五维结构化锐评语料
+- `rhetoric/transitions.json` — 事实、影响和建议的连接语
 
 ### 模板
 - `templates/report.md` — 报告 Markdown 模板
