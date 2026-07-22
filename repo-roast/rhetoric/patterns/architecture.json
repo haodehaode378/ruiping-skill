@@ -1,0 +1,262 @@
+[
+  {
+    "id": "architecture-fake-layering-01",
+    "dimension": "architecture",
+    "patterns": ["fake-layering"],
+    "severities": ["high", "medium"],
+    "devices": ["contrast"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "目录分层与实际依赖方向不一致。",
+      "sharp": "目录名已经把分层写清楚了，依赖方向却没有配合。",
+      "savage": "这套分层完成了命名仪式，实际依赖仍然自由穿墙。"
+    }
+  },
+  {
+    "id": "architecture-fake-layering-02",
+    "dimension": "architecture",
+    "patterns": ["fake-layering"],
+    "severities": ["medium", "low"],
+    "devices": ["reversal"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "现有层级没有提供预期的隔离作用。",
+      "sharp": "这些层本来负责隔离变化，现在只负责增加路径长度。",
+      "savage": "分层把路绕远了，边界倒是一厘米也没守住。"
+    }
+  },
+  {
+    "id": "architecture-circular-dependency-01",
+    "dimension": "architecture",
+    "patterns": ["circular-dependency"],
+    "severities": ["critical", "high", "medium"],
+    "devices": ["technical-metaphor"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "模块之间形成闭环依赖，初始化和变更顺序因此相互牵制。",
+      "sharp": "两个模块互相提供地基，任何一边动工都得先等另一边。",
+      "savage": "依赖图在这里首尾相接，成功把模块边界画成了莫比乌斯环。"
+    }
+  },
+  {
+    "id": "architecture-circular-dependency-02",
+    "dimension": "architecture",
+    "patterns": ["circular-dependency"],
+    "severities": ["high", "medium"],
+    "devices": ["rhetorical-question"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "相互导入使两个模块无法独立演化。",
+      "sharp": "既然双方都必须先知道对方，模块边界究竟隔离了什么？",
+      "savage": "这两个模块谁也离不开谁，独立模块只剩下文件名上的独立。"
+    }
+  },
+  {
+    "id": "architecture-god-object-01",
+    "dimension": "architecture",
+    "patterns": ["god-object"],
+    "severities": ["high", "medium"],
+    "devices": ["analogy"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "该对象集中承担了多个不相关的系统职责。",
+      "sharp": "这个对象不是协调者，是没有正式任命的系统总管。",
+      "savage": "所有职责都向这里报到，单一职责原则只能在门外排队。"
+    }
+  },
+  {
+    "id": "architecture-god-object-02",
+    "dimension": "architecture",
+    "patterns": ["god-object"],
+    "severities": ["medium", "low"],
+    "devices": ["deadpan"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "职责持续聚集使该对象成为主要变更中心。",
+      "sharp": "新增功能的流程很稳定：先找到这个对象，再继续往里面加。",
+      "savage": "它对业务无所不知，唯一不了解的是自己的职责边界。"
+    }
+  },
+  {
+    "id": "architecture-leaky-abstraction-01",
+    "dimension": "architecture",
+    "patterns": ["leaky-abstraction"],
+    "severities": ["high", "medium"],
+    "devices": ["reversal"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "调用方仍需了解抽象层试图隐藏的实现细节。",
+      "sharp": "这层抽象隐藏了实现，只是调用方仍得完整记住实现。",
+      "savage": "抽象层把细节藏了起来，然后把藏匿地址逐个发给调用方。"
+    }
+  },
+  {
+    "id": "architecture-leaky-abstraction-02",
+    "dimension": "architecture",
+    "patterns": ["leaky-abstraction"],
+    "severities": ["medium", "low"],
+    "devices": ["contrast"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "抽象接口与底层实现细节耦合。",
+      "sharp": "接口看起来通用，参数却把底层实现的身份证带齐了。",
+      "savage": "通用接口只是封面，翻开第一页就是底层实现说明书。"
+    }
+  },
+  {
+    "id": "architecture-over-engineering-01",
+    "dimension": "architecture",
+    "patterns": ["over-engineering"],
+    "severities": ["medium", "low", "info"],
+    "devices": ["contrast"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "当前抽象数量超过了现有变化点的需要。",
+      "sharp": "一个实现配了三层扩展机制，未来还没来，接待大厅先建好了。",
+      "savage": "需求只有一把椅子，这里先交付了一座可插拔会议中心。"
+    }
+  },
+  {
+    "id": "architecture-over-engineering-02",
+    "dimension": "architecture",
+    "patterns": ["over-engineering"],
+    "severities": ["medium", "low"],
+    "devices": ["rhetorical-question"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "额外间接层尚未对应第二个实际用例。",
+      "sharp": "既然只有一个实现，这几层分派目前在替谁扩展？",
+      "savage": "扩展点已经严阵以待，唯一缺席的是需要扩展的东西。"
+    }
+  },
+  {
+    "id": "architecture-under-engineering-01",
+    "dimension": "architecture",
+    "patterns": ["under-engineering"],
+    "severities": ["high", "medium"],
+    "devices": ["technical-metaphor"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "核心流程缺少明确边界，变更影响会跨职责扩散。",
+      "sharp": "业务逻辑共享一个开放式办公区，任何改动都能顺手影响邻座。",
+      "savage": "边界全部采用空气墙，代码当然可以畅通无阻地互相干扰。"
+    }
+  },
+  {
+    "id": "architecture-under-engineering-02",
+    "dimension": "architecture",
+    "patterns": ["under-engineering"],
+    "severities": ["medium", "low"],
+    "devices": ["understatement"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "多个职责共用同一实现路径，隔离能力有限。",
+      "sharp": "这里对职责分离采取了相当开放的理解。",
+      "savage": "职责边界非常包容，包容到所有逻辑都住进了同一间屋。"
+    }
+  },
+  {
+    "id": "architecture-boundary-violation-01",
+    "dimension": "architecture",
+    "patterns": ["boundary-violation"],
+    "severities": ["high", "medium"],
+    "devices": ["contrast"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "该依赖方向跨越了既定模块边界。",
+      "sharp": "边界文档负责画线，这条依赖负责证明线可以直接跨过去。",
+      "savage": "模块边界在图上戒备森严，在导入语句面前则完全免检。"
+    }
+  },
+  {
+    "id": "architecture-boundary-violation-02",
+    "dimension": "architecture",
+    "patterns": ["boundary-violation"],
+    "severities": ["medium", "low"],
+    "devices": ["reversal"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "这条依赖使下层模块反向感知上层策略。",
+      "sharp": "下层本来负责提供能力，现在还得顺便了解上层怎么指挥。",
+      "savage": "依赖倒置没有发生，依赖迷路后倒是成功走反了方向。"
+    }
+  },
+  {
+    "id": "architecture-duplicated-domain-logic-01",
+    "dimension": "architecture",
+    "patterns": ["duplicated-domain-logic"],
+    "severities": ["high", "medium"],
+    "devices": ["analogy"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "同一领域规则存在多个独立实现。",
+      "sharp": "同一条业务规则拥有多个副本，每个副本都能发展自己的版本。",
+      "savage": "业务规则在这里实行多中心治理，改一次就有机会得到多种真相。"
+    }
+  },
+  {
+    "id": "architecture-duplicated-domain-logic-02",
+    "dimension": "architecture",
+    "patterns": ["duplicated-domain-logic"],
+    "severities": ["medium", "low"],
+    "devices": ["rhetorical-question"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "重复规则增加了行为分歧的可能。",
+      "sharp": "当两个副本得出不同结果时，哪一个才是领域规则？",
+      "savage": "一条规则复制成两份以后，项目顺利获得了两个事实来源。"
+    }
+  },
+  {
+    "id": "architecture-configuration-coupling-01",
+    "dimension": "architecture",
+    "patterns": ["configuration-coupling"],
+    "severities": ["high", "medium"],
+    "devices": ["technical-metaphor"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "配置结构直接渗透到多个业务模块。",
+      "sharp": "配置对象成了模块之间的公共总线，谁都能搭车，谁都受它影响。",
+      "savage": "配置不再提供参数，它已经升职为全系统的隐形控制面。"
+    }
+  },
+  {
+    "id": "architecture-configuration-coupling-02",
+    "dimension": "architecture",
+    "patterns": ["configuration-coupling"],
+    "severities": ["medium", "low"],
+    "devices": ["contrast"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "局部功能依赖了完整的全局配置形状。",
+      "sharp": "模块只需要一个值，却要求整份配置陪同出席。",
+      "savage": "为了读取一个开关，这个模块把整个配置中心请进了客厅。"
+    }
+  },
+  {
+    "id": "architecture-hidden-global-state-01",
+    "dimension": "architecture",
+    "patterns": ["hidden-global-state"],
+    "severities": ["high", "medium"],
+    "devices": ["technical-metaphor"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "隐式共享状态使模块行为依赖不可见的外部顺序。",
+      "sharp": "全局状态在这里成了模块之间的隐形总线，数据上车时没有时刻表。",
+      "savage": "参数列表保持得很干净，因为真正的输入都从暗门进来了。"
+    }
+  },
+  {
+    "id": "architecture-hidden-global-state-02",
+    "dimension": "architecture",
+    "patterns": ["hidden-global-state"],
+    "severities": ["medium", "low"],
+    "devices": ["deadpan"],
+    "requires_verified_evidence": true,
+    "tones": {
+      "professional": "函数签名没有呈现其全部状态依赖。",
+      "sharp": "从签名看它没有依赖，运行起来却对外部状态相当熟悉。",
+      "savage": "接口宣称独立，执行时则熟练调用了全局后援团。"
+    }
+  }
+]
