@@ -31,14 +31,18 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
       "severity": "critical|high|medium|low|info",
       "file": "path/to/file.ext",
       "line": 42,
-      "description": "what the readability issue is",
-      "suggestion": "how to improve naming/structure"
+      "title": "short factual title",
+      "description": "what the readability issue is, specifically and observably",
+      "impact": "the concrete comprehension or maintenance consequence",
+      "suggestion": "how to improve naming/structure",
+      "pattern": "stable-kebab-case-pattern"
     }
   ],
   "highlights": [
     {
       "file": "path/to/file.ext",
       "line": 10,
+      "title": "short factual highlight title",
       "description": "what was exceptionally readable and why"
     }
   ],
@@ -53,7 +57,10 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 
 ## Constraints
 
+- Output must conform to `schemas/review.schema.json`.
 - Every issue MUST cite a specific file + line number.
+- Keep `title`, `description`, `impact`, and `suggestion` distinct. `description` states evidence; `impact` states consequence.
+- Use a stable kebab-case `pattern`. Do not guess a pattern when the underlying fact is unverified.
 - Naming criticism is about clarity, not personal taste. "data" is objectively vague; "responsePayload" vs "data" is a choice.
 - Do not comment on architecture, security, or performance.
 - Adapt expectations to language conventions: Go favors short names, Java favors descriptive names. Flag violations of the language's own conventions, not cross-language norms.

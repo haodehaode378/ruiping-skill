@@ -40,7 +40,7 @@
 - **来源维度**：{{dimension}}
 - **位置**：`{{file}}:{{line}}`
 - **问题**：{{description}}
-- **风险**：{{risk}}
+- **影响**：{{impact}}
 - **建议**：{{suggestion}}
 
 {{/each}}

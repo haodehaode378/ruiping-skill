@@ -38,6 +38,8 @@ Count files, estimate LOC. Count test files (patterns: *.test.*, *test*, *_test*
 
 Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 
+The output must conform to `schemas/scout.schema.json`.
+
 ```json
 {
   "project": {

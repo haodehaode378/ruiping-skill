@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Repo-Roast Editor Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["project_profile", "reviews", "review_errors", "flavor"],
+  "properties": {
+    "project_profile": { "$ref": "scout.schema.json" },
+    "reviews": {
+      "type": "object",
+      "propertyNames": {
+        "enum": ["architecture", "security", "performance", "readability", "engineering"]
+      },
+      "additionalProperties": { "$ref": "review.schema.json" }
+    },
+    "review_errors": {
+      "type": "object",
+      "propertyNames": {
+        "enum": ["architecture", "security", "performance", "readability", "engineering"]
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["status", "message"],
+        "properties": {
+          "status": { "enum": ["timeout", "parse_error", "validation_error"] },
+          "message": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "flavor": { "enum": ["default", "google", "startup", "oss-maintainer"] }
+  }
+}

@@ -104,7 +104,7 @@ description: Opinionated, semantic code repository review with parallel sub-agen
    {完整读取 rubrics/{dimension}.md 内容}
 
    ## 输出要求
-   只输出 JSON，不要有任何其他文字。JSON 格式见上方审查指令。
+   只输出 JSON，不要有任何其他文字。JSON 必须符合 `schemas/review.schema.json`。
    每个 issue 必须包含 file 和 line 字段，且 file 必须存在、line 必须落在文件行数范围内。
    ```
 
@@ -114,7 +114,7 @@ description: Opinionated, semantic code repository review with parallel sub-agen
 
 **结果收集**：
 - 每个 Sub-Agent 的输出应该是严格的 JSON
-- 解析 JSON，验证必要字段存在、severity 值合法（critical/high/medium/low/info）、score 为 S/A/B/C/D、每个 issue 的 file/line 可定位
+- 解析 JSON，并按 `schemas/review.schema.json` 验证必要字段、枚举值和字段结构；每个 issue 的 file/line 还必须在仓库中实际可定位
 - 如果 JSON 解析失败，尝试从输出文本中提取 JSON 块。仍失败则标记为 `parse_error`
 - 将各维度结果聚合为 `{ reviews: { architecture: {...}, security: {...}, ... } }`
 
@@ -129,13 +129,18 @@ description: Opinionated, semantic code repository review with parallel sub-agen
       "severity": "high",
       "file": "src/utils.ts",
       "line": 42,
+      "title": "工具模块形成反向依赖",
       "description": "utility 模块反向依赖 service 层",
-      "suggestion": "提取共享类型到独立模块"
+      "impact": "底层工具与业务层形成耦合，修改 service 时会扩大影响范围",
+      "suggestion": "提取共享类型到独立模块",
+      "pattern": "boundary-violation"
     }
   ],
   "highlights": [
     {
       "file": "src/index.ts",
+      "line": 8,
+      "title": "入口职责单一",
       "description": "入口文件职责清晰，仅做引导不做业务"
     }
   ],

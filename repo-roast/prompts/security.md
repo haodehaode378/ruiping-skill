@@ -44,14 +44,18 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
       "severity": "critical|high|medium|low|info",
       "file": "path/to/file.ext",
       "line": 42,
-      "description": "what the vulnerability is",
-      "suggestion": "how to fix it"
+      "title": "short factual title",
+      "description": "what the vulnerability is, specifically and observably",
+      "impact": "the concrete security consequence and required conditions",
+      "suggestion": "how to fix it",
+      "pattern": "stable-kebab-case-pattern"
     }
   ],
   "highlights": [
     {
       "file": "path/to/file.ext",
       "line": 10,
+      "title": "short factual highlight title",
       "description": "what security practice was done well"
     }
   ],
@@ -66,7 +70,10 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations.
 
 ## Constraints
 
+- Output must conform to `schemas/review.schema.json`.
 - Every issue MUST cite a specific file + line number.
+- Keep `title`, `description`, `impact`, and `suggestion` distinct. `description` states evidence; `impact` states consequence and exploit conditions.
+- Use a stable kebab-case `pattern`. Do not guess a pattern when the underlying fact is unverified.
 - Do NOT fabricate vulnerabilities. If something looks suspicious but cannot be confirmed as exploitable, mark it as `info` severity.
 - Do not comment on architecture, performance, or code style.
 - Do NOT attempt to exploit or test vulnerabilities — this is a read-only static review.

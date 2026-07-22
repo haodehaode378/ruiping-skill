@@ -30,14 +30,18 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations. E
       "severity": "critical|high|medium|low|info",
       "file": "path/to/file.ext",
       "line": 42,
-      "description": "what the problem is, specifically",
-      "suggestion": "how to fix it or improve it"
+      "title": "short factual title",
+      "description": "what the problem is, specifically and observably",
+      "impact": "the concrete architectural consequence",
+      "suggestion": "how to fix it or improve it",
+      "pattern": "stable-kebab-case-pattern"
     }
   ],
   "highlights": [
     {
       "file": "path/to/file.ext",
       "line": 10,
+      "title": "short factual highlight title",
       "description": "what was done well and why it matters"
     }
   ],
@@ -52,7 +56,10 @@ Produce ONLY the following JSON object. No markdown wrapping, no explanations. E
 
 ## Constraints
 
+- Output must conform to `schemas/review.schema.json`.
 - Every issue MUST cite a specific file + line number. If you cannot confirm with a line number, do not include the issue.
+- Keep `title`, `description`, `impact`, and `suggestion` distinct. `description` states evidence; `impact` states consequence.
+- Use a stable kebab-case `pattern`. Do not guess a pattern when the underlying fact is unverified.
 - Do not comment on security, performance, or style — that is for other reviewers.
 - Do not fabricate findings. If the project is too small for architecture analysis, say so in the summary and keep issues minimal.
 - For projects with <10 source files: focus on file-level organization rather than module-level architecture.
